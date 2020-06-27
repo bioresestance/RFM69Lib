@@ -5,7 +5,7 @@
  *  @brief Address values for all Registers that can be accessed.
  *  @note The order that the values are defined are critical. Do not change unless the datasheet is consulted.
  */
-enum class RFM69::registerAddresses
+enum class RFM69RegisterAddresses
 {
             RegFifo = 0x00,
             RegOpMode,
