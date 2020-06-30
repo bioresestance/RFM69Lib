@@ -3,15 +3,38 @@
 #include <esp_freertos_hooks.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "esp_task_wdt.h"
 
-static RFM69 module;
+
+static RFM69 module();
+static RegOpMode test();
+
+
+uint8_t spiInit(void);
+bool spiRead(uint8_t id, uint16_t length, uint8_t* buff);
+bool spiWrite(uint8_t id, uint16_t length, uint8_t* buff);
 
 void setup() {
-  // put your setup code here, to run once:
+  
+
+  
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+
+}
+
+
+uint8_t spiInit(void) {
+
+}
+
+bool spiRead(uint8_t id, uint16_t length, uint8_t* buff) {
+
+
+}
+
+bool spiWrite(uint8_t id, uint16_t length, uint8_t* buff) {
+
 
 }

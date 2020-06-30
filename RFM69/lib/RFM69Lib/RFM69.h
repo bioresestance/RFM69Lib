@@ -8,9 +8,9 @@
  *  SPI channel. What the function actually does is up to the implementation. After
  *  all initialization is complete, the function will return an ID value for the SPI channel.
  *  This ID value has no meaning to the class, but is used by the read and write function to 
- *  access the SPI channel.
+ *  access the SPI channel. 
  * 
- * @return Returns an ID used for read and write functions.
+ * @return Returns an ID used for read and write functions. 0xFF if failure.
  */
 typedef uint8_t (*RFM69spiInitFnc)();
 
@@ -38,34 +38,15 @@ typedef bool (*RFM69spiReadFnc)(uint8_t , uint16_t, uint8_t*);
 typedef bool (*RFM69spiWriteFnc)(uint8_t , uint16_t, uint8_t*);
 
 
-class RFM69 {
-
-    private:
-        //! Function pointers to control SPI channel.
-        RFM69spiInitFnc init_function;
-        RFM69spiReadFnc read_function;
-        RFM69spiWriteFnc write_function;
-        //! ID for the SPI channel.
-        uint8_t spi_id;
-        
-    public:  
-
-        /******************Constructors/Desctructors**************************************/
-        // Defaults
-        RFM69();
-        ~RFM69(); 
-        /*********************************************************************************/
-        
-        
-
-
-
-};
-
 // Enumeration of all of the possible register address in the RFM69HCW
 enum class RFM69RegisterAddresses;
+//! Operational Mode Register definition.
+struct RegOpMode;
 
-
+/**
+ * @brief Base class for RFM69 register definitions.
+ * 
+ */
 class RFM69Register {
 protected:
     uint8_t _default_value;
@@ -85,5 +66,68 @@ public:
         _recommended_value = recommended_value;
         _address = address;
     }
+
+};
+
+
+/**
+ * @brief Main class for RFM69 access. 
+ * 
+ */
+class RFM69 {
+
+    private:
+        //! Function pointers to control SPI channel.
+        RFM69spiInitFnc init_function;
+        RFM69spiReadFnc read_function;
+        RFM69spiWriteFnc write_function;
+        //! ID for the SPI channel.
+        uint8_t spi_id = 0xFF;
+
+    public:  
+
+        /******************Constructors/Desctructors**************************************/
+        // Defaults
+        RFM69();
+        ~RFM69(); 
+        /*********************************************************************************/
+        
+        /**
+         * @brief Sets the spi function pointers for SPI control.
+         * 
+         * @param init_function Function pointer to the SPI init function.
+         * @param read_function  Function pointer to the SPI read function. 
+         * @param write_function Function pointer to the SPi write function.
+         */
+        void set_spi(RFM69spiInitFnc init_function, RFM69spiReadFnc read_function, RFM69spiWriteFnc write_function);
+
+
+
+
+
+
+
+        /**
+         * @brief Writes a buffer to a given register.
+         * 
+         * @param reg Register to access.
+         * @param num_to_write Number of bytes to write. 
+         * @param buff Buffer containing bytes to write. Must be at least num_to_write long.
+         * @return true When all bytes were written successfully.
+         * @return false When either an error occurred or not all bytes written.
+         */
+        bool write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t* buff );
+
+        /**
+         * @brief Writes a buffer to a given register.
+         * 
+         * @param reg Register to access.
+         * @param num_to_read Number of bytes to write. 
+         * @param buff Buffer where read in bytes are stored. Must be at least num_to_read long.
+         * @return true When all bytes were written successfully.
+         * @return false When either an error occurred or not all bytes written.
+         */
+        bool read_reg( RFM69RegisterAddresses reg, uint8_t num_to_read, uint8_t* buff );
+
 
 };
