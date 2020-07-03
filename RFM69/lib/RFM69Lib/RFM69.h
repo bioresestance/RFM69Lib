@@ -85,6 +85,8 @@ class RFM69 {
         uint8_t spi_id = 0xFF;
 
     public:  
+        // Defines the maximum SPI clock for the RFM69, in hertz.
+        static const uint32_t max_spi_clock = 10000000u;
 
         /******************Constructors/Desctructors**************************************/
         // Defaults
@@ -128,6 +130,9 @@ class RFM69 {
          * @return false When either an error occurred or not all bytes written.
          */
         bool read_reg( RFM69RegisterAddresses reg, uint8_t num_to_read, uint8_t* buff );
+
+
+        void poll_mode( void );
 
 
 };
