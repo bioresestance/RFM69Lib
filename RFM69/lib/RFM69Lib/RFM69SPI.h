@@ -7,6 +7,8 @@
  */
 struct RFM69SPI {
 
+
+/*********************************************SPI Access Function Pointers*************************************/
     /**
      * @brief Function pointer to a function that will perform initializing of SPI channel.
      * 
@@ -73,10 +75,27 @@ struct RFM69SPI {
     typedef bool (*WriteFnc)(uint8_t , uint16_t, uint8_t*);
 
 
-/*****************************************************Function Pointer Holders*********************/
+/*****************************************Function Pointer Holders**********************************/
     InitFnc init_function;
     BeginFnc begin_function;
     EndFnc end_function;
     ReadFnc read_function;
     WriteFnc write_function;
+/**********************************************Methods*********************************************/
+
+    /**
+     * @brief Validate the current stored function pointers.
+     * 
+     * @return true If no function pointer is null.
+     * @return false If 1 or more are null.
+     */
+    bool validate() {
+        // Check if any function is null. Return true is none are null.
+        return !( init_function == nullptr || 
+                begin_function == nullptr || 
+                end_function == nullptr || 
+                read_function == nullptr || 
+                write_function == nullptr );
+    }
+
 };
