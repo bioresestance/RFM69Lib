@@ -10,6 +10,14 @@ struct RegOpMode;
 /**
  * @brief Base class for RFM69 register definitions.
  * 
+ *  Used to store and convert register values between raw bits and 
+ *  their individual values. This base class is the template for all
+ *  individual register class to implement. 
+ * 
+ *  Classes that inherit should call the base constructor to fill in 
+ *  the generic values and will need to overide the get_byte method
+ *  to fill in the byte that is returned as the register defines.
+ * 
  */
 class RFM69Register {
 protected:
@@ -18,19 +26,39 @@ protected:
     RFM69RegisterAddresses _address;
 
 public:
+    /**
+     * @brief Get the default value of the register.
+     * 
+     * @return uint8_t default value of the register
+     */
     uint8_t get_default_value()  {return _default_value;}
+
+    /**
+     * @brief Get the recommended value of the register.
+     * 
+     * @return uint8_t recommended value of the register
+     */
     uint8_t get_recommended_value() { return _recommended_value;}
+    /**
+     * @brief Get the address of the register
+     * 
+     * @return uint8_t address of the register
+     */
+
     uint8_t get_address() {return (uint8_t)_address;}
  
-    //! Returns the Current set value.
-    virtual uint8_t get_value() = 0;
+    /**
+     * @brief Returns the stored value as a single raw byte.
+     * 
+     * @return uint8_t Raw byte as defined in register.
+     */
+    virtual uint8_t get_byte() = 0;
 
     RFM69Register(uint8_t default_value, uint8_t recommended_value, RFM69RegisterAddresses address) {
         _default_value = default_value;  
         _recommended_value = recommended_value;
         _address = address;
     }
-
 };
 
 

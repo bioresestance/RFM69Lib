@@ -1,4 +1,5 @@
 #include "RFM69.h"
+#include <utils.h>
 
 /**
  *  @brief Address values for all Registers that can be accessed.
@@ -93,6 +94,8 @@ enum class RFM69RegisterAddresses
             RegTestAfc = 0x71,
 };
 
+
+//! Operational Mode Register Definition.
 struct RegOpMode : public RFM69Register 
 {
     bool _sequencerOff;
@@ -115,5 +118,47 @@ struct RegOpMode : public RFM69Register
         //byte |= BIT
 
         return byte;
+    }
+};
+
+/**
+ * @brief Temperature Register 1.
+ * 
+ */
+struct RegTemp1 : public RFM69Register 
+{
+    bool _tempMeasStart;
+    bool _tempMeasRunning;
+
+    RegTemp1(bool tempMeasStart, bool tempMeasRunning) 
+    : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1) {
+        _tempMeasStart = tempMeasStart;
+        _tempMeasRunning = tempMeasRunning;
+    }
+
+    uint8_t get_value() {
+        uint8_t byte = 0;      
+        // Set the bits in the byte.
+        BIT_SET_FROM(byte, 3, _tempMeasStart);
+        BIT_SET_FROM(byte, 2, _tempMeasRunning);     
+        return byte;
+    }
+};
+
+/**
+ * @brief Temperature Register 1.
+ * 
+ */
+struct RegTemp2 : public RFM69Register 
+{
+    uint8_t _tempValue;
+
+    RegTemp2(uint8_t tempValue) 
+    : RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2) {
+        _tempValue = tempValue;
+    }
+
+    uint8_t get_value() {   
+        return _tempValue;
     }
 };

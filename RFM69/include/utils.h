@@ -19,3 +19,12 @@
 #define BITMASK_FLIP(x,y) ((x) ^= (y))
 #define BITMASK_CHECK_ALL(x,y) (((x) & (y)) == (y))   // warning: evaluates y twice
 #define BITMASK_CHECK_ANY(x,y) ((x) & (y))
+
+/**
+ * @brief a=Target variable b=bit number c=conditon to check
+ * 
+ * Sets a bit at bit number based on a given condition. If condition true
+ * the bit is set to 1, if false, it is set to 0.
+ * 
+ */
+#define BIT_SET_FROM(a, b, c) ((c) ? BIT_SET(a, b) : BIT_CLEAR (a, b))
