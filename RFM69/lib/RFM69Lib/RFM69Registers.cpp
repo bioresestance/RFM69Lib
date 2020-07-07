@@ -146,7 +146,7 @@ struct RegTemp1 : public RFM69Register
 };
 
 /**
- * @brief Temperature Register 1.
+ * @brief Temperature Register 2.
  * 
  */
 struct RegTemp2 : public RFM69Register 
