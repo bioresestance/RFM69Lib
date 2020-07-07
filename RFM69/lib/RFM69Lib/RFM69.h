@@ -61,16 +61,23 @@ class RFM69 {
          * @brief Attaches the spi function pointers for SPI control.
          * 
          * @param init_function Function pointer to the SPI init function.
-         * @param begin_func Function pointer to the SPI Begin transfer function.
-         * @param end_func Function pointer to the SPI End transfer function.
+         * @param begin_function Function pointer to the SPI Begin transfer function.
+         * @param end_function Function pointer to the SPI End transfer function.
          * @param read_function  Function pointer to the SPI read function. 
          * @param write_function Function pointer to the SPi write function.
          */
         void spi_attach(RFM69SPI::InitFnc init_function, 
-                        RFM69SPI::BeginFnc begin_func,
-                        RFM69SPI::EndFnc end_func,
+                        RFM69SPI::BeginFnc begin_function,
+                        RFM69SPI::EndFnc end_function,
                         RFM69SPI::ReadFnc read_function, 
                         RFM69SPI::WriteFnc write_function);
+
+        /**
+         * @brief Attaches the spi function pointers for SPI control.
+         * 
+         * @param spiFuncs Struct that holds all required spi access func pointers.
+         */
+        void spi_attach( RFM69SPI &spiFuncs);
 
         /**
          * @brief Writes a buffer to a given register.
