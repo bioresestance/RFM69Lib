@@ -60,6 +60,11 @@ bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t
     return res;
 }
 
+bool RFM69::write_reg( RFM69Register &reg ) {
+    uint8_t byte = reg.get_byte();
+    return write_reg( reg.get_reg_address(), sizeof(byte), &byte );
+}
+
 
  bool RFM69::read_reg( RFM69RegisterAddresses reg, uint8_t num_to_read, uint8_t* buff ) {
 
@@ -84,3 +89,9 @@ bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t
 
     return res;
  }
+
+
+ bool RFM69::read_reg( RFM69Register &reg ) {
+    uint8_t byte;
+    return read_reg( reg.get_reg_address(), sizeof(byte), &byte );
+}

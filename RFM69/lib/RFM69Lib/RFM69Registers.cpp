@@ -143,6 +143,10 @@ struct RegTemp1 : public RFM69Register
         BIT_SET_FROM(byte, 2, _tempMeasRunning);     
         return byte;
     }
+
+        void set_byte(uint8_t byte) {
+            
+        }
 };
 
 /**

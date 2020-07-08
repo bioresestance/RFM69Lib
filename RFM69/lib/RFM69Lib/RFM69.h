@@ -46,6 +46,13 @@ public:
      */
 
     uint8_t get_address() {return (uint8_t)_address;}
+
+    /**
+     * @brief Get the address as an enum.
+     * 
+     * @return RFM69RegisterAddresses The register address as an enum.
+     */
+    RFM69RegisterAddresses get_reg_address() {return _address;}
  
     /**
      * @brief Returns the stored value as a single raw byte.
@@ -53,6 +60,8 @@ public:
      * @return uint8_t Raw byte as defined in register.
      */
     virtual uint8_t get_byte() = 0;
+
+    virtual void set_byte( uint8_t byte) = 0;
 
     RFM69Register(uint8_t default_value, uint8_t recommended_value, RFM69RegisterAddresses address) {
         _default_value = default_value;  
@@ -119,6 +128,15 @@ class RFM69 {
         bool write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t* buff );
 
         /**
+         * @brief Writes the content of a register object to its corresponding RFM69 register. 
+         * 
+         * @param reg Register object to write its content to. Used to determine address.
+         * @return true If the write was successful.
+         * @return false If something went wrong in the register write.
+         */
+        bool write_reg( RFM69Register &reg );
+
+        /**
          * @brief Writes a buffer to a given register.
          * 
          * @param reg Register to access.
@@ -129,7 +147,14 @@ class RFM69 {
          */
         bool read_reg( RFM69RegisterAddresses reg, uint8_t num_to_read, uint8_t* buff );
 
-
+        /**
+         * @brief Reads in the contents of a register to a Register object
+         * 
+         * @param reg Register object to hold the contents of the read. Used to determine address.
+         * @return true If the read was successful.
+         * @return false If something went wrong in the register read. 
+         */
+        bool read_reg( RFM69Register &reg );
 
         void poll_mode( void );
 };
