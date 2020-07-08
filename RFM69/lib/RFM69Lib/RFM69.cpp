@@ -12,6 +12,7 @@ RFM69::~RFM69() {
 }
 
 
+/*************************************************HAL access Functions*********************************/
 void RFM69::spi_attach(RFM69SPI::InitFnc init_function, 
                         RFM69SPI::BeginFnc begin_function,
                         RFM69SPI::EndFnc end_function,
@@ -36,6 +37,9 @@ void RFM69::spi_attach( RFM69SPI &spiFuncs) {
 }
 
 
+
+
+/***********************************************RFM69 Register access functions**************************/
 bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t* buff ) {
 
     //! Store the result of all SPI access.
@@ -59,6 +63,7 @@ bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t
 
     return res;
 }
+
 
 bool RFM69::write_reg( RFM69Register &reg ) {
     uint8_t byte = reg.get_byte();
@@ -93,5 +98,10 @@ bool RFM69::write_reg( RFM69Register &reg ) {
 
  bool RFM69::read_reg( RFM69Register &reg ) {
     uint8_t byte;
-    return read_reg( reg.get_reg_address(), sizeof(byte), &byte );
+    bool result = read_reg( reg.get_reg_address(), sizeof(byte), &byte );
+    reg.set_byte(byte);
+    return result;
 }
+
+
+

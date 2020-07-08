@@ -1,6 +1,8 @@
-#include "RFM69.h"
+#pragma once
+#include <stdint.h>
 #include <utils.h>
 
+// Enumeration of all of the possible register address in the RFM69HCW
 /**
  *  @brief Address values for all Registers that can be accessed.
  *  @note The order that the values are defined are critical. Do not change unless the datasheet is consulted.
@@ -94,6 +96,71 @@ enum class RFM69RegisterAddresses
             RegTestAfc = 0x71,
 };
 
+/***************************************************Base Register Class Definition*******************/
+/**
+ * @brief Base class for RFM69 register definitions.
+ * 
+ *  Used to store and convert register values between raw bits and 
+ *  their individual values. This base class is the template for all
+ *  individual register class to implement. 
+ * 
+ *  Classes that inherit should call the base constructor to fill in 
+ *  the generic values and will need to overide the get_byte method
+ *  to fill in the byte that is returned as the register defines.
+ * 
+ */
+class RFM69Register {
+protected:
+    uint8_t _default_value;
+    uint8_t _recommended_value;
+    RFM69RegisterAddresses _address;
+
+public:
+    /**
+     * @brief Get the default value of the register.
+     * 
+     * @return uint8_t default value of the register
+     */
+    uint8_t get_default_value()  {return _default_value;}
+
+    /**
+     * @brief Get the recommended value of the register.
+     * 
+     * @return uint8_t recommended value of the register
+     */
+    uint8_t get_recommended_value() { return _recommended_value;}
+    /**
+     * @brief Get the address of the register
+     * 
+     * @return uint8_t address of the register
+     */
+
+    uint8_t get_address() {return (uint8_t)_address;}
+
+    /**
+     * @brief Get the address as an enum.
+     * 
+     * @return RFM69RegisterAddresses The register address as an enum.
+     */
+    RFM69RegisterAddresses get_reg_address() {return _address;}
+ 
+    /**
+     * @brief Returns the stored value as a single raw byte.
+     * 
+     * @return uint8_t Raw byte as defined in register.
+     */
+    virtual uint8_t get_byte() = 0;
+
+    virtual void set_byte( uint8_t byte) = 0;
+
+    RFM69Register(uint8_t default_value, uint8_t recommended_value, RFM69RegisterAddresses address) {
+        _default_value = default_value;  
+        _recommended_value = recommended_value;
+        _address = address;
+    }
+};
+
+/***********************************************Individual Register Classes*************************************/
 
 //! Operational Mode Register Definition.
 struct RegOpMode : public RFM69Register 
@@ -111,13 +178,17 @@ struct RegOpMode : public RFM69Register
         _mode = mode;
     }
 
-    uint8_t get_value() {
+    uint8_t get_byte() {
         uint8_t byte = 0;
 
         byte |= (_mode & 0x07) << 1;
         //byte |= BIT
 
         return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        //TODO
     }
 };
 
@@ -136,7 +207,7 @@ struct RegTemp1 : public RFM69Register
         _tempMeasRunning = tempMeasRunning;
     }
 
-    uint8_t get_value() {
+    uint8_t get_byte() {
         uint8_t byte = 0;      
         // Set the bits in the byte.
         BIT_SET_FROM(byte, 3, _tempMeasStart);
@@ -144,9 +215,11 @@ struct RegTemp1 : public RFM69Register
         return byte;
     }
 
-        void set_byte(uint8_t byte) {
-            
-        }
+    void set_byte(uint8_t byte) {
+        _tempMeasStart = BIT_CHECK(byte, 3);
+        _tempMeasRunning = BIT_CHECK(byte, 2);
+        // Rest is ignored.
+    }
 };
 
 /**
@@ -162,7 +235,11 @@ struct RegTemp2 : public RFM69Register
         _tempValue = tempValue;
     }
 
-    uint8_t get_value() {   
+    uint8_t get_byte() {   
         return _tempValue;
+    }
+
+    void set_byte(uint8_t byte) {
+        _tempValue = byte;   
     }
 };

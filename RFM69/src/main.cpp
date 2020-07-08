@@ -9,6 +9,8 @@
 
 static RFM69 module;
 
+static RegTemp1 reg;
+
 /***************************Prototypes********************************************/
 
 
@@ -17,6 +19,10 @@ void setup() {
 
   // Initialize the spi access functions.
   module.spi_attach(&spiInit, &spiBegin, &spiEnd, &spiRead, &spiWrite);
+
+
+uint8_t byte = reg.get_byte();
+
 }
 
 void loop() {
