@@ -183,14 +183,19 @@ struct RegOpMode : public RFM69Register
     uint8_t get_byte() {
         uint8_t byte = 0;
 
-        byte |= (_mode & 0x07) << 1;
-        //byte |= BIT
-
+        BIT_SET_FROM(byte, 7, _sequencerOff);
+        BIT_SET_FROM(byte, 6, _listenOn);
+        BIT_SET_FROM(byte, 5, _listenAbort);
+        // bits 2 - 4 are mode.
+        byte |= (_mode & 0x07) << 2;
         return byte;
     }
 
     void set_byte(uint8_t byte) {
-        //TODO
+        _sequencerOff = BIT_CHECK(byte, 7);
+        _listenOn = BIT_CHECK(byte, 6);
+        _listenAbort = BIT_CHECK(byte, 5);
+        _mode = (byte & 0b00011100) >> 2;
     }
 };
 
@@ -235,7 +240,7 @@ struct RegTemp2 : public RFM69Register
 {
     uint8_t _tempValue;
 
-    RegTemp2(): RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
+    RegTemp2(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegOpMode) {}
 
     RegTemp2(uint8_t tempValue) 
     : RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2) {

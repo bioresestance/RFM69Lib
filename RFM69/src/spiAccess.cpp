@@ -11,11 +11,12 @@ uint8_t spiInit(void) {
   // Stores the current ID to be returned. 
   static uint8_t curr_ID = 0;
 
-  // Set up pin modes
-   pinMode (CHIP_SELECT_PIN, OUTPUT);
+  // Set up the chip select pin.
+  pinMode (CHIP_SELECT_PIN, OUTPUT);
+  digitalWrite(CHIP_SELECT_PIN, HIGH);
 
-  // Initialize SPI.
-  SPI.begin();
+  // Initialize SPI. Using SPI 3 as default.
+  SPI.begin(18,19,23,5);
 
   // Return the current ID.
   return curr_ID++;

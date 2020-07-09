@@ -102,6 +102,3 @@ bool RFM69::write_reg( RFM69Register &reg ) {
     reg.set_byte(byte);
     return result;
 }
-
-
-

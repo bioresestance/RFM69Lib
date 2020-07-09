@@ -9,12 +9,20 @@
  */
 class RFM69 {
 
+    //! Enum to specify how the RFM69 module should be controlled.
+    public:
+        enum class RFM69controlMode {
+            POLLING_MODE,   //!< The object will periodically poll the module for changes.
+            INTERRUPT_MODE  //!< The object will use interrupt pins to know when a change occurs.
+        };
+
     private:
         //! Holds all of the function pointer for SPI access.
         RFM69SPI spi_func;
-
         //! ID for the SPI channel.
         uint8_t spi_id = 0xFF;
+        //! Holds the current control state.
+        RFM69controlMode currControlMode;
 
     public:  
         // Defines the maximum SPI clock for the RFM69, in hertz.
@@ -47,6 +55,10 @@ class RFM69 {
          * @param spiFuncs Struct that holds all required spi access func pointers.
          */
         void spi_attach( RFM69SPI &spiFuncs);
+
+        //TODO
+        void io_attach();
+
 
         /**
          * @brief Writes a buffer to a given register.
@@ -88,5 +100,8 @@ class RFM69 {
          */
         bool read_reg( RFM69Register &reg );
 
+        
+
+        //TODO
         void poll_mode( void );
 };
