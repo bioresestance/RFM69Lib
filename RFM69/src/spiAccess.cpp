@@ -12,7 +12,7 @@ uint8_t spiInit(void) {
   static uint8_t curr_ID = 0;
 
   // Set up pin modes
-  //TODO
+   pinMode (CHIP_SELECT_PIN, OUTPUT);
 
   // Initialize SPI.
   SPI.begin();

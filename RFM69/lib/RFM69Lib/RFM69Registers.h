@@ -170,6 +170,7 @@ struct RegOpMode : public RFM69Register
     bool _listenAbort;
     uint8_t _mode; // Only uses 3 bits.
 
+    RegOpMode(): RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
     RegOpMode(bool sequencerOff, bool listenOn, bool listenAbort, uint8_t mode) 
     : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {
         _sequencerOff = sequencerOff;
@@ -177,6 +178,7 @@ struct RegOpMode : public RFM69Register
         _listenAbort = listenAbort;
         _mode = mode;
     }
+    
 
     uint8_t get_byte() {
         uint8_t byte = 0;
@@ -201,12 +203,15 @@ struct RegTemp1 : public RFM69Register
     bool _tempMeasStart;
     bool _tempMeasRunning;
 
+    RegTemp1() : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
+
     RegTemp1(bool tempMeasStart, bool tempMeasRunning) 
     : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1) {
         _tempMeasStart = tempMeasStart;
         _tempMeasRunning = tempMeasRunning;
     }
 
+   
     uint8_t get_byte() {
         uint8_t byte = 0;      
         // Set the bits in the byte.
@@ -229,6 +234,8 @@ struct RegTemp1 : public RFM69Register
 struct RegTemp2 : public RFM69Register 
 {
     uint8_t _tempValue;
+
+    RegTemp2(): RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
 
     RegTemp2(uint8_t tempValue) 
     : RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2) {

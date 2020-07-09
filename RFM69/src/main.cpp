@@ -8,24 +8,26 @@
 
 
 static RFM69 module;
-
-static RegTemp1 reg;
+static RegOpMode reg;
 
 /***************************Prototypes********************************************/
 
 
 void setup() {
 
+  //Serial Debugging.
+  Serial.begin(9600);
 
   // Initialize the spi access functions.
   module.spi_attach(&spiInit, &spiBegin, &spiEnd, &spiRead, &spiWrite);
-
-
-uint8_t byte = reg.get_byte();
-
+  //reg.set_byte(0x00);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  Serial.println("Testing");
+  delay(1000);
 
+  module.read_reg(reg);
+
+  Serial.println(reg.get_byte());
 }

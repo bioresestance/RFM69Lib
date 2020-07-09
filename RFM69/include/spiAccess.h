@@ -1,7 +1,7 @@
 #pragma once
 #include <SPI.h>
 
-#define CHIP_SELECT_PIN   (3)
+#define CHIP_SELECT_PIN   (1)
 
 uint8_t spiInit(void);
 bool spiBegin(uint8_t id);
