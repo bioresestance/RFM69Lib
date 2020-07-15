@@ -153,10 +153,17 @@ public:
 
     virtual void set_byte( uint8_t byte) = 0;
 
-    RFM69Register(uint8_t default_value, uint8_t recommended_value, RFM69RegisterAddresses address) {
-        _default_value = default_value;  
-        _recommended_value = recommended_value;
-        _address = address;
+    //! Allows the object to be directly cast as an uint8_t.
+    operator uint8_t() {return get_byte();}
+
+    //! Allows the register to be assigned a byte value directly. 
+    RFM69Register& operator=( uint8_t byte) { this->set_byte(byte); return *this;}
+
+    RFM69Register(uint8_t default_value, uint8_t recommended_value, RFM69RegisterAddresses address) 
+    : _default_value(default_value), 
+    _recommended_value( recommended_value),
+    _address(address) {
+
     }
 };
 
@@ -170,13 +177,19 @@ struct RegOpMode : public RFM69Register
     bool _listenAbort;
     uint8_t _mode; // Only uses 3 bits.
 
-    RegOpMode(): RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
+    RegOpMode()
+    :RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {
+
+    }
+
+
     RegOpMode(bool sequencerOff, bool listenOn, bool listenAbort, uint8_t mode) 
-    : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {
-        _sequencerOff = sequencerOff;
-        _listenOn = listenOn;
-        _listenAbort = listenAbort;
-        _mode = mode;
+    :RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode),
+    _sequencerOff(sequencerOff),
+    _listenOn(listenOn),
+    _listenAbort(listenAbort),
+    _mode(mode){
+
     }
     
 
@@ -205,15 +218,16 @@ struct RegOpMode : public RFM69Register
  */
 struct RegTemp1 : public RFM69Register 
 {
-    bool _tempMeasStart;
-    bool _tempMeasRunning;
+    bool _tempMeasStart = false;
+    bool _tempMeasRunning = false;
 
     RegTemp1() : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
 
     RegTemp1(bool tempMeasStart, bool tempMeasRunning) 
-    : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1) {
-        _tempMeasStart = tempMeasStart;
-        _tempMeasRunning = tempMeasRunning;
+    : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1), 
+    _tempMeasRunning(tempMeasRunning),
+    _tempMeasStart(tempMeasStart) {
+
     }
 
    
@@ -243,8 +257,8 @@ struct RegTemp2 : public RFM69Register
     RegTemp2(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegOpMode) {}
 
     RegTemp2(uint8_t tempValue) 
-    : RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2) {
-        _tempValue = tempValue;
+    : RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2), _tempValue(tempValue) {
+        
     }
 
     uint8_t get_byte() {   
