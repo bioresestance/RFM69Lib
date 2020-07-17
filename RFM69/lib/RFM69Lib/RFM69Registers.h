@@ -13,7 +13,7 @@ enum class RFM69RegisterAddresses
             RegOpMode,
             RegDataModul,
             RegBitrateMsb,
-            RegeBitrateLsb,
+            RegBitrateLsb,
             RegFdevMsb,
             RegFdevLsb,
             RegFrfMsb,
@@ -187,7 +187,7 @@ struct RegOpMode : public RFM69Register
         BIT_SET_FROM(byte, 6, _listenOn);
         BIT_SET_FROM(byte, 5, _listenAbort);
         // bits 2 - 4 are mode.
-        byte |= (_mode & 0x07) << 2;
+        byte |= (_mode & 0b00000111) << 2;
         return byte;
     }
 

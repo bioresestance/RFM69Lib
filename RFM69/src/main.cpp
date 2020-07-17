@@ -1,10 +1,6 @@
 #include <Arduino.h>
 #include <spiAccess.h>
-#include <stdio.h>
 #include <RFM69.h>
-#include <esp_freertos_hooks.h>
-#include <FreeRTOS.h>
-#include <freertos/task.h>
 
 
 static RFM69 module;
@@ -20,14 +16,35 @@ void setup() {
 
   // Initialize the spi access functions.
   module.spi_attach(&spiInit, &spiBegin, &spiEnd, &spiRead, &spiWrite);
-  //reg.set_byte(0x00);
+
+  spiInit();
+    Serial.println("Starting");
 }
 
 void loop() {
-  Serial.println("Testing");
-  delay(1000);
 
-  module.read_reg(reg);
+  //delay(100);
+  //Serial.println();
+  // SPI.beginTransaction(SPISettings( RFM69::max_spi_clock /10 , MSBFIRST, SPI_MODE0) );
+  // digitalWrite(CHIP_SELECT_PIN, LOW);
+  // Serial.println();
+  // SPI.transfer(addr & 0x7F);
+  // uint8_t regVal = SPI.transfer(0);
+  // digitalWrite(CHIP_SELECT_PIN, HIGH);
+  // SPI.endTransaction();
 
-  Serial.println(reg.get_byte());
+  uint8_t byte = 0xAA;
+  uint8_t data;
+  do {
+    module.write_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(byte), &byte);
+    module.read_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(data), &data);
+  }while (data != byte);
+  byte = 0x55;
+  do {
+    module.write_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(byte), &byte);
+    module.read_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(data), &data);
+  }while (data != byte);
+
+  Serial.println("Completed!!!");
+
 }

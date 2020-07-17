@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 //! SPI settings used to communicate with the RFM69 module. Set to half max speed.
-static SPISettings spiSettings = SPISettings( RFM69::max_spi_clock / 2 , MSBFIRST, SPI_MODE0);
+static SPISettings spiSettings = SPISettings( RFM69::max_spi_clock/10 , MSBFIRST, SPI_MODE0);
 
 
 uint8_t spiInit(void) {
@@ -16,7 +16,7 @@ uint8_t spiInit(void) {
   digitalWrite(CHIP_SELECT_PIN, HIGH);
 
   // Initialize SPI. Using SPI 3 as default.
-  SPI.begin(18,19,23,5);
+  SPI.begin(18,19,23,CHIP_SELECT_PIN);
 
   // Return the current ID.
   return curr_ID++;
@@ -29,6 +29,8 @@ bool spiBegin(uint8_t id) {
   SPI.beginTransaction(spiSettings);
   //Select the Chip select line.
   digitalWrite(CHIP_SELECT_PIN, LOW);
+  //Serial.print(" ");
+  delayMicroseconds(100);
   return true;
 }
 
