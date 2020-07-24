@@ -7,44 +7,32 @@ static RFM69 module;
 static RegOpMode reg;
 
 /***************************Prototypes********************************************/
+void printCurrMode() {
+  Serial.printf("Current mode is 0x%02X\n", (uint8_t) module.get_mode() );
+}
 
 
 void setup() {
 
   //Serial Debugging.
   Serial.begin(9600);
+  delay(2000);
 
   // Initialize the spi access functions.
   module.spi_attach(&spiInit, &spiBegin, &spiEnd, &spiRead, &spiWrite);
 
   spiInit();
-    Serial.println("Starting");
+  Serial.println("Starting");
+  delay(2000);
+  do {
+    module.set_mode(RFM69::OpMode::RECEIVE);
+  } while(module.get_mode() != RFM69::OpMode::RECEIVE );
+  
 }
 
 void loop() {
 
-  //delay(100);
-  //Serial.println();
-  // SPI.beginTransaction(SPISettings( RFM69::max_spi_clock /10 , MSBFIRST, SPI_MODE0) );
-  // digitalWrite(CHIP_SELECT_PIN, LOW);
-  // Serial.println();
-  // SPI.transfer(addr & 0x7F);
-  // uint8_t regVal = SPI.transfer(0);
-  // digitalWrite(CHIP_SELECT_PIN, HIGH);
-  // SPI.endTransaction();
+  printCurrMode();
 
-  uint8_t byte = 0xAA;
-  uint8_t data;
-  do {
-    module.write_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(byte), &byte);
-    module.read_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(data), &data);
-  }while (data != byte);
-  byte = 0x55;
-  do {
-    module.write_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(byte), &byte);
-    module.read_reg(RFM69RegisterAddresses::RegSyncValue1, sizeof(data), &data);
-  }while (data != byte);
-
-  Serial.println("Completed!!!");
-
+  delay(1000);
 }
