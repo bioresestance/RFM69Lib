@@ -40,7 +40,7 @@ void RFM69::spi_attach( RFM69SPI &spiFuncs) {
 
 
 /***********************************************RFM69 Register access functions**************************/
-bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t* buff ) {
+bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t value) {
 
     //! Store the result of all SPI access.
     bool res = true;
@@ -57,7 +57,7 @@ bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t
     // Write out the address of the register to write to.
     res &= this->spi_func.write_function(spi_id, sizeof(addr), &addr );
     // Write out the payload to the register.
-    res &= this->spi_func.write_function(spi_id, num_to_write, buff);
+    res &= this->spi_func.write_function(spi_id, sizeof(value), &value);
     // End the transfer.
     res &= this->spi_func.end_function(spi_id);
 
@@ -67,11 +67,11 @@ bool RFM69::write_reg( RFM69RegisterAddresses reg, uint8_t num_to_write, uint8_t
 
 bool RFM69::write_reg( RFM69Register &reg ) {
     uint8_t byte = reg.get_byte();
-    return write_reg( reg.get_reg_address(), sizeof(byte), &byte );
+    return write_reg( reg.get_reg_address(), byte );
 }
 
 
- bool RFM69::read_reg( RFM69RegisterAddresses reg, uint8_t num_to_read, uint8_t* buff ) {
+ bool RFM69::read_reg( RFM69RegisterAddresses reg, uint8_t* value ) {
 
     //! Store the result of all SPI access.
     bool res = true;
@@ -88,7 +88,7 @@ bool RFM69::write_reg( RFM69Register &reg ) {
     // Write out the address of the register to read from.
     res &= this->spi_func.write_function(spi_id, sizeof(addr), &addr );
     // Read in the payload from the register.
-    res &= this->spi_func.read_function(spi_id, num_to_read, buff);
+    res &= this->spi_func.read_function(spi_id, sizeof(value), value);
     // End the transfer.
     res &= this->spi_func.end_function(spi_id);
 
@@ -98,7 +98,7 @@ bool RFM69::write_reg( RFM69Register &reg ) {
 
  bool RFM69::read_reg( RFM69Register &reg ) {
     uint8_t byte;
-    bool result = read_reg( reg.get_reg_address(), sizeof(byte), &byte );
-    reg.set_byte(byte);
+    bool result = read_reg( reg.get_reg_address(), &byte );
+    reg = byte;
     return result;
 }

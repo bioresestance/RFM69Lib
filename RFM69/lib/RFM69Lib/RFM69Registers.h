@@ -151,6 +151,11 @@ public:
      */
     virtual uint8_t get_byte() = 0;
 
+    /**
+     * @brief Allows the register to be set as a byte.
+     * 
+     * @param byte The byte to set the register to.
+     */
     virtual void set_byte( uint8_t byte) = 0;
 
     //! Allows the object to be directly cast as an uint8_t.
@@ -218,15 +223,19 @@ struct RegOpMode : public RFM69Register
  */
 struct RegTemp1 : public RFM69Register 
 {
-    bool _tempMeasStart = false;
-    bool _tempMeasRunning = false;
+    bool _tempMeasStart;
+    bool _tempMeasRunning;
 
-    RegTemp1() : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode) {}
+    RegTemp1() 
+    : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode),
+     _tempMeasStart(false) ,
+    _tempMeasRunning(false)
+    {}
 
     RegTemp1(bool tempMeasStart, bool tempMeasRunning) 
-    : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1), 
-    _tempMeasRunning(tempMeasRunning),
-    _tempMeasStart(tempMeasStart) {
+    : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1),
+    _tempMeasStart(tempMeasStart), 
+    _tempMeasRunning(tempMeasRunning) {
 
     }
 
