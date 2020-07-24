@@ -29,7 +29,7 @@ bool spiBegin(uint8_t id) {
   SPI.beginTransaction(spiSettings);
   //Select the Chip select line.
   digitalWrite(CHIP_SELECT_PIN, LOW);
-  //Serial.print(" ");
+  Serial.print(" ");
   delayMicroseconds(100);
   return true;
 }
@@ -39,6 +39,7 @@ bool spiEnd(uint8_t id) {
   //Select the Chip select line.
   digitalWrite(CHIP_SELECT_PIN, HIGH);
   SPI.endTransaction();
+  Serial.print(" ");
   return true;
 }
 
