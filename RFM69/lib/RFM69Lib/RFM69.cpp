@@ -102,3 +102,24 @@ bool RFM69::write_reg( RFM69Register &reg ) {
     reg = byte;
     return result;
 }
+
+void RFM69::set_mode(RFM69::OpMode mode) {  
+    RegOpMode opMode;
+    bool res = true;
+
+    // Read in the current setting, modify mode and write it back.
+    res &= read_reg(opMode);
+    opMode._mode = (uint8_t) mode;
+    res &= write_reg(opMode);
+
+    if(res) {
+        // If saved in register, save it locally.
+        currMode = mode;
+    }
+}
+
+RFM69::OpMode RFM69::get_mode(void) {
+    RegOpMode opMode;
+    read_reg(opMode);
+    return (RFM69::OpMode) opMode._mode;
+}
