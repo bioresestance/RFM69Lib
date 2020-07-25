@@ -427,4 +427,47 @@ struct RegFrfLsb : public RFM69Register
     }
 };
 
+/**
+ * @brief Oscillator register 1.
+ */
+struct RegOsc1 : public RFM69Register 
+{
+    bool _rcCalStart;
+    bool _rcCalDone;
+
+    RegOsc1(): RFM69Register(0x41, 0x41, RFM69RegisterAddresses::RegOsc1) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 7, _rcCalStart);
+        BIT_SET_FROM(byte, 6, _rcCalDone);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        _rcCalStart = BIT_CHECK(byte, 7);
+        _rcCalDone = BIT_CHECK(byte, 6);
+    }
+};
+
+/**
+ * @brief AFC control register.
+ */
+struct RegAfcCtrl : public RFM69Register 
+{
+    bool _afcLowBetaOn;
+
+    RegAfcCtrl(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegAfcCtrl) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 5, _afcLowBetaOn);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        _afcLowBetaOn = BIT_CHECK(byte, 5);
+    }
+};
+
 }
