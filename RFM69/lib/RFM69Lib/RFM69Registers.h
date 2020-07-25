@@ -334,5 +334,97 @@ struct RegBitrateLsb : public RFM69Register
     }
 };
 
+/**
+ * @brief Most significant Byte of freq. divider register.
+ * 
+ */
+struct RegFdevMsb : public RFM69Register 
+{
+    uint8_t _fDevMsb;  // Bits 13:8
+
+    RegFdevMsb(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegFdevMsb) {}
+
+    uint8_t get_byte() { 
+        return (_fDevMsb & 0b00011111);
+    }
+
+    void set_byte(uint8_t byte) {
+        _fDevMsb = (byte & 0b00011111);
+    }
+};
+
+/**
+ * @brief Least Significant Byte of freq. divider register.
+ * 
+ */
+struct RegFdevLsb : public RFM69Register 
+{
+    uint8_t _fDevMsb;  // Bits 7:0
+
+    RegFdevLsb(): RFM69Register(0x52, 0x52, RFM69RegisterAddresses::RegFdevLsb) {}
+
+    uint8_t get_byte() { 
+        return _fDevMsb ;
+    }
+
+    void set_byte(uint8_t byte) {
+        _fDevMsb = byte;
+    }
+};
+
+/**
+ * @brief Most Significant Byte of the RF carrier register.
+ */
+struct RegFrfMsb : public RFM69Register 
+{
+    uint8_t _fRFMsb;  // Bits 23:16
+
+    RegFrfMsb(): RFM69Register(0xe4, 0xe4, RFM69RegisterAddresses::RegFrfMsb) {}
+
+    uint8_t get_byte() { 
+        return _fRFMsb ;
+    }
+
+    void set_byte(uint8_t byte) {
+        _fRFMsb = byte;
+    }
+};
+
+
+/**
+ * @brief Mid Byte of the RF carrier register.
+ */
+struct RegFrfMid : public RFM69Register 
+{
+    uint8_t _fRFMid;  // Bits 15:8
+
+    RegFrfMid(): RFM69Register(0xc0, 0xc0, RFM69RegisterAddresses::RegFrfMid) {}
+
+    uint8_t get_byte() { 
+        return _fRFMid;
+    }
+
+    void set_byte(uint8_t byte) {
+        _fRFMid = byte;
+    }
+};
+
+/**
+ * @brief Least Significant Byte of the RF carrier register.
+ */
+struct RegFrfLsb : public RFM69Register 
+{
+    uint8_t _fRFLsb;  // Bits 7:0
+
+    RegFrfLsb(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegFrfLsb) {}
+
+    uint8_t get_byte() { 
+        return _fRFLsb ;
+    }
+
+    void set_byte(uint8_t byte) {
+        _fRFLsb = byte;
+    }
+};
 
 }
