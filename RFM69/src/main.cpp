@@ -5,7 +5,6 @@
 using namespace RFM69Radio;
 
 static RFM69 module;
-static RegOpMode reg;
 
 /***************************Prototypes********************************************/
 void printCurrMode() {

@@ -22,7 +22,7 @@ struct RFM69SPI {
      * 
      * @return Returns an ID used for read and write functions. 0xFF if failure.
      */
-    typedef uint8_t (*InitFnc)();
+    typedef uint8_t (*InitFnc)(void);
 
     /**
      * @brief Function point to a function that sets up the SPI driver to begin a transfer.
@@ -31,12 +31,12 @@ struct RFM69SPI {
      *  takes in the SPI ID and should perform any tasks at the driver level to prepare for a transfer.
      *  This may include saving any settings and change over to RFM69 ones and set the chip select pin.
      * 
-     *  @param first SPI ID for the RFM69 module.
+     *  @param SPIHandle SPI Handle for the RFM69 module.
      * 
      *  @return Whether the task was successful or not. Used to determine if transfer can begin.
      * 
      */
-    typedef bool (*BeginFnc)(uint8_t);
+    typedef bool (*BeginFnc)(uint8_t SPIHandle);
 
     /**
      * @brief Function point to a function that sets up the SPI driver to end a transfer.
@@ -45,36 +45,36 @@ struct RFM69SPI {
      *  takes in the SPI ID and should perform any tasks at the driver level to end a transfer.
      *  This may include loading any saved settings and deselect the chip select pin.
      * 
-     *  @param first SPI ID for the RFM69 module.
+     *  @param SPIHandle SPI handle for the RFM69 module.
      * 
      *  @return Whether the task was successful or not.
      * 
      */
-    typedef bool (*EndFnc)(uint8_t);
+    typedef bool (*EndFnc)(uint8_t SPIHandle);
 
 
     /**
      * @brief Function pointer type for SPI read function.
      * 
-     * @param first address of SPI chip. Used by function to determine chip.
-     * @param second Number of bytes to read. 
-     * @param third Buffer to store results of read. Ensure at least length long.
+     * @param SPIHandle SPI handle for the RFM69 module.
+     * @param readLength Number of bytes to read. 
+     * @param readBuff Buffer to store results of read. Ensure at least length long.
      * 
      * @return Whether the result was successful or not.
      * 
      */
-    typedef bool (*ReadFnc)(uint8_t , uint16_t, uint8_t*);
+    typedef bool (*ReadFnc)(uint8_t SPIHandle, uint16_t readLength, uint8_t* readBuff);
 
     /**
      * @brief Function pointer type for SPI write function.
      * 
-     * @param first address of SPI chip. Used by function to determine chip.
-     * @param second Number of bytes to write to device. 
-     * @param third Buffer containing bytes to write. Must be at least length long.
+     * @param SPIHandle SPI handle for the RFM69 module.
+     * @param writeLength Number of bytes to write to device. 
+     * @param writeBuff Buffer containing bytes to write. Must be at least length long.
      * 
      * @return Whether the result was successful or not.
      */
-    typedef bool (*WriteFnc)(uint8_t , uint16_t, uint8_t*);
+    typedef bool (*WriteFnc)(uint8_t SPIHandle, uint16_t writeLength, uint8_t* writeBuff);
 
 
 /*****************************************Function Pointer Holders**********************************/
