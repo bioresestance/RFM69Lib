@@ -1,5 +1,7 @@
 #include "RFM69.h"
 
+namespace RFM69Radio {
+
 //! Sets the given Address to Write access for the RFM69. Top bit set to 1.
 #define RFM69_WRITE_ADDR(addr) (((uint8_t)addr) | 0x80)   
 //! Sets the given Address to READ access for the RFM69. Top Bit set to 0
@@ -119,7 +121,11 @@ void RFM69::set_mode(RFM69::OpMode mode) {
 }
 
 RFM69::OpMode RFM69::get_mode(void) {
+    // Read in the mode from the register.
     RegOpMode opMode;
     read_reg(opMode);
     return (RFM69::OpMode) opMode._mode;
+}
+
+
 }

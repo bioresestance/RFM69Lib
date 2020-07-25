@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 
+
+namespace RFM69Radio {
 /**
  * @brief Structure to hold all function pointers for SPI access.
  * 
@@ -99,3 +101,5 @@ struct RFM69SPI {
     }
 
 };
+
+}

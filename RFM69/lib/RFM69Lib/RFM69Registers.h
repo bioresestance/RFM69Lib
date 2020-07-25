@@ -2,7 +2,10 @@
 #include <stdint.h>
 #include <utils.h>
 
-// Enumeration of all of the possible register address in the RFM69HCW
+namespace RFM69Radio {
+    
+
+
 /**
  *  @brief Address values for all Registers that can be accessed.
  *  @note The order that the values are defined are critical. Do not change unless the datasheet is consulted.
@@ -231,14 +234,6 @@ struct RegTemp1 : public RFM69Register
      _tempMeasStart(false) ,
     _tempMeasRunning(false)
     {}
-
-    RegTemp1(bool tempMeasStart, bool tempMeasRunning) 
-    : RFM69Register(0x01, 0x01, RFM69RegisterAddresses::RegTemp1),
-    _tempMeasStart(tempMeasStart), 
-    _tempMeasRunning(tempMeasRunning) {
-
-    }
-
    
     uint8_t get_byte() {
         uint8_t byte = 0;      
@@ -265,12 +260,7 @@ struct RegTemp2 : public RFM69Register
 
     RegTemp2(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegOpMode) {}
 
-    RegTemp2(uint8_t tempValue) 
-    : RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2), _tempValue(tempValue) {
-        
-    }
-
-    uint8_t get_byte() {   
+     uint8_t get_byte() {   
         return _tempValue;
     }
 
@@ -278,3 +268,71 @@ struct RegTemp2 : public RFM69Register
         _tempValue = byte;   
     }
 };
+
+/**
+ * @brief Data Modulation option register.
+ * 
+ */
+struct RegDataModul : public RFM69Register 
+{
+    uint8_t _dataMode;  // 2 bits
+    uint8_t _modulationType; // 2 bits
+    uint8_t _modulationShaping; // 2 bits
+
+    RegDataModul(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegDataModul) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        byte |= (_dataMode & 0b00000011) << 5;  //Bit 5-6
+        byte |= (_modulationType & 0b00000011) << 3; //Bit 4-3
+        byte |= (_modulationShaping & 0b00000011); //Bit 0-1
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        _dataMode = (byte & 0b01100000) >> 5;
+        _modulationType = (byte & 0b00011000) >> 3;
+        _modulationShaping = (byte & 0b00000011);
+    }
+};
+
+/**
+ * @brief Most significant Byte of Bit rate selection register.
+ * 
+ */
+struct RegBitrateMsb : public RFM69Register 
+{
+    uint8_t _bitrateMsb;  // Bitrate bits 15:8
+
+    RegBitrateMsb(): RFM69Register(0x1A, 0x1A, RFM69RegisterAddresses::RegBitrateMsb) {}
+
+    uint8_t get_byte() { 
+        return _bitrateMsb;
+    }
+
+    void set_byte(uint8_t byte) {
+        _bitrateMsb = byte;
+    }
+};
+
+/**
+ * @brief Least significant Byte of Bit rate selection register.
+ * 
+ */
+struct RegBitrateLsb : public RFM69Register 
+{
+    uint8_t _bitrateLsb;  // Bitrate bits 7:0
+
+    RegBitrateLsb(): RFM69Register(0x0B, 0x0B, RFM69RegisterAddresses::RegBitrateLsb) {}
+
+    uint8_t get_byte() { 
+        return _bitrateLsb;
+    }
+
+    void set_byte(uint8_t byte) {
+        _bitrateLsb = byte;
+    }
+};
+
+
+}

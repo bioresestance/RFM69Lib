@@ -2,6 +2,9 @@
 #include <RFM69.h>
 #include <Arduino.h>
 
+
+using namespace RFM69Radio;
+
 //! SPI settings used to communicate with the RFM69 module. Set to half max speed.
 static SPISettings spiSettings = SPISettings( RFM69::max_spi_clock/10 , MSBFIRST, SPI_MODE0);
 

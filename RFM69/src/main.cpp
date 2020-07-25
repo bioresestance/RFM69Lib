@@ -2,6 +2,7 @@
 #include <spiAccess.h>
 #include <RFM69.h>
 
+using namespace RFM69Radio;
 
 static RFM69 module;
 static RegOpMode reg;

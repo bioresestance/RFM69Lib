@@ -4,22 +4,25 @@
 #include <RFM69Registers.h>
 
 
+namespace RFM69Radio {
+
 /**
  * @brief Main class for RFM69 access. 
  * 
  */
 class RFM69 {
 
-    //! Enum to specify how the RFM69 module should be controlled.
+    
     public:
+
+        /** @brief Enum to specify how the RFM69 module should be controlled. */
         enum class controlMode {
             POLLING_MODE,   //!< The object will periodically poll the module for changes.
             INTERRUPT_MODE  //!< The object will use interrupt pins to know when a change occurs.
         };
-        /**
-         * @brief Defines the different possible modes of the module.
-         * 
-         */
+
+
+        /** @brief Defines the different possible modes of the module. */
         enum class OpMode {
             SLEEP,          //!< Sleep mode.
             STANDBY,        //!< Standby mode.
@@ -126,6 +129,7 @@ class RFM69 {
          */
         RFM69::OpMode get_mode( void );
 
-        //TODO
-        void poll_mode( void );
+
 };
+
+}
