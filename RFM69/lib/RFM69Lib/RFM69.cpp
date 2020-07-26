@@ -172,4 +172,32 @@ int8_t RFM69::read_temp(void) {
     read_reg(tempResult);
     return tempControl;
 }
+
+void RFM69::set_bitrate(uint32_t new_bitrate) {
+    
+    RegBitrateLsb lsb;
+    RegBitrateMsb msb;
+
+    // Equation from datasheet.
+    uint16_t reg_value = FXSCO / new_bitrate;
+
+    msb.set_byte( (uint8_t)((reg_value & 0xFF00) >> 8));
+    lsb.set_byte((uint8_t)((reg_value & 0x00FF)));
+
+    write_reg(msb);
+    write_reg(lsb);
+}
+
+uint32_t RFM69::get_bitrate(void) {
+
+    RegBitrateLsb lsb;
+    RegBitrateMsb msb;
+
+    // Read in the current register value.
+    read_reg(msb);
+    read_reg(lsb);
+    uint16_t reg_value = lsb | (msb << 8);
+    
+    return FXSCO / reg_value;
+}
 }

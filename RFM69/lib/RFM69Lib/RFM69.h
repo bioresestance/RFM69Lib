@@ -166,6 +166,19 @@ class RFM69 {
          */
         int8_t read_temp( void );
 
+        /**
+         * @brief Set the new bitrate for the module.
+         * 
+         * @param new_bitrate The new value of bitrate.
+         */
+        void set_bitrate(uint32_t new_bitrate);
+
+        /**
+         * @brief Gets the current bitrate for the module.
+         * 
+         * @return uint32_t The current bitrate for the module.
+         */
+        uint32_t get_bitrate( void );
 
 };
 
