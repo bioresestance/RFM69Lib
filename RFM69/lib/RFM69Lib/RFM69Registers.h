@@ -165,7 +165,7 @@ public:
     operator uint8_t() {return get_byte();}
 
     //! Allows the register to be assigned a byte value directly. 
-    RFM69Register& operator=( uint8_t byte) { this->set_byte(byte); return *this;}
+    RFM69Register& operator = ( uint8_t byte) { this->set_byte(byte); return *this;}
 
     RFM69Register(uint8_t default_value, uint8_t recommended_value, RFM69RegisterAddresses address) 
     : _default_value(default_value), 
@@ -469,5 +469,28 @@ struct RegAfcCtrl : public RFM69Register
         _afcLowBetaOn = BIT_CHECK(byte, 5);
     }
 };
+
+/// \todo Adde the listen registers here.
+
+/**
+ * @brief AFC control register.
+ */
+// struct RegAfcCtrl : public RFM69Register 
+// {
+//     bool _afcLowBetaOn;
+
+//     RegAfcCtrl(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegAfcCtrl) {}
+
+//     uint8_t get_byte() { 
+//         uint8_t byte = 0;
+//         BIT_SET_FROM(byte, 5, _afcLowBetaOn);
+//         return byte;
+//     }
+
+//     void set_byte(uint8_t byte) {
+//         _afcLowBetaOn = BIT_CHECK(byte, 5);
+//     }
+// };
+
 
 }

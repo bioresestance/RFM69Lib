@@ -123,9 +123,53 @@ void RFM69::set_mode(RFM69::OpMode mode) {
 RFM69::OpMode RFM69::get_mode(void) {
     // Read in the mode from the register.
     RegOpMode opMode;
+
     read_reg(opMode);
     return (RFM69::OpMode) opMode._mode;
 }
 
+void RFM69::set_freq_deviation(uint16_t freq_deviation) {
 
+    RegFdevMsb msb;
+    RegFdevLsb lsb;
+    // Equation from datasheet.
+    uint16_t reg_value = freq_deviation / FSTEP;
+
+    // Write the two bytes to the registers.
+    msb.set_byte( (uint8_t)((reg_value & 0xFF00) >> 8));
+    lsb.set_byte((uint8_t)((reg_value & 0x00FF)));
+    write_reg(msb);
+    write_reg(lsb);
+}
+
+uint16_t RFM69::get_freq_deviation(void) {
+    RegFdevMsb msb;
+    RegFdevLsb lsb;
+
+    // Read in the two values and combine.
+    read_reg(msb);
+    read_reg(lsb);
+    uint16_t reg_value = lsb | (msb << 8);
+    // Equation from datasheet.
+    return reg_value * FSTEP;
+}
+
+int8_t RFM69::read_temp(void) {
+    
+    RegTemp1 tempControl;
+    RegTemp2 tempResult;
+
+    // Start the measurement.
+    tempControl._tempMeasStart = true;
+    write_reg(tempControl);
+
+    // Poll the reg until the measurement is complete.
+    do {
+        read_reg(tempControl);
+    } while (tempControl._tempMeasRunning);
+    
+    // Finnally, read the result and return it.
+    read_reg(tempResult);
+    return tempControl;
+}
 }

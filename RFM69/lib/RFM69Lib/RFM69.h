@@ -42,8 +42,22 @@ class RFM69 {
         OpMode currMode = OpMode::STANDBY;
 
     public:  
-        // Defines the maximum SPI clock for the RFM69, in hertz.
+        /**
+         * @brief Defines the maximum SPI clock for the RFM69, in hertz.
+         * 
+         */
         static const uint32_t max_spi_clock = 10000000u;
+        /**
+         * @brief Define the Crystal oscillator frequency. 32 MHz.
+         * 
+         */
+        static const uint32_t FXSCO = 32000000;
+
+        /**
+         * @brief Defines the Frequency synthesizer step. 
+         * 
+         */
+        static const uint32_t FSTEP = FXSCO / 524288;
 
         /******************Constructors/Desctructors**************************************/
         // Defaults
@@ -64,14 +78,14 @@ class RFM69 {
                         RFM69SPI::BeginFnc begin_function,
                         RFM69SPI::EndFnc end_function,
                         RFM69SPI::ReadFnc read_function, 
-                        RFM69SPI::WriteFnc write_function);
+                        RFM69SPI::WriteFnc write_function );
 
         /**
          * @brief Attaches the spi function pointers for SPI control.
          * 
          * @param spiFuncs Struct that holds all required spi access func pointers.
          */
-        void spi_attach( RFM69SPI &spiFuncs);
+        void spi_attach( RFM69SPI &spiFuncs );
 
         //TODO
         void io_attach();
@@ -120,7 +134,7 @@ class RFM69 {
          * 
          * @param mode The new mode.
          */
-        void set_mode(RFM69::OpMode mode);
+        void set_mode( RFM69::OpMode mode );
 
         /**
          * @brief Get the current mode.
@@ -128,6 +142,29 @@ class RFM69 {
          * @return OpMode 
          */
         RFM69::OpMode get_mode( void );
+
+        /**
+         * @brief Sets the frequency deviation.
+         * 
+         * @param freq_deviation The value of frequency deviation.
+         */
+        void set_freq_deviation( uint16_t freq_deviation );
+
+        /**
+         * @brief Get the frequency deviation.
+         * 
+         * @return uint32_t The current value of frequency deviation
+         */
+        uint16_t get_freq_deviation( void );
+
+        /**
+         * @brief Reads the current temperature of the module.
+         * 
+         *  \note The function starts the read and blocks until complete.
+         * 
+         * @return int8_t Returns the value of temperature.
+         */
+        int8_t read_temp( void );
 
 
 };
