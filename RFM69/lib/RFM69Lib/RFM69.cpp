@@ -1,4 +1,5 @@
-#include "RFM69.h"
+#include <RFM69.h>
+
 
 namespace RFM69Radio {
 
@@ -170,7 +171,7 @@ int8_t RFM69::read_temp(void) {
     
     // Finnally, read the result and return it.
     read_reg(tempResult);
-    return tempControl;
+    return tempResult;
 }
 
 void RFM69::set_bitrate(uint32_t new_bitrate) {

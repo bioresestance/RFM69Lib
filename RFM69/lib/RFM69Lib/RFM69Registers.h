@@ -230,7 +230,7 @@ struct RegTemp1 : public RFM69Register
     bool _tempMeasRunning;
 
     RegTemp1() 
-    : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegOpMode),
+    : RFM69Register(0x04, 0x04, RFM69RegisterAddresses::RegTemp1),
      _tempMeasStart(false) ,
     _tempMeasRunning(false)
     {}
@@ -258,7 +258,7 @@ struct RegTemp2 : public RFM69Register
 {
     uint8_t _tempValue;
 
-    RegTemp2(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegOpMode) {}
+    RegTemp2(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegTemp2) {}
 
      uint8_t get_byte() {   
         return _tempValue;

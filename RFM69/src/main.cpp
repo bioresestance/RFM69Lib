@@ -24,15 +24,18 @@ void setup() {
   spiInit();
   Serial.println("Starting");
   delay(2000);
-  do {
-    module.set_mode(RFM69::OpMode::RECEIVE);
-  } while(module.get_mode() != RFM69::OpMode::RECEIVE );
+  // do {
+  //   module.set_mode(RFM69::OpMode::RECEIVE);
+  //   delay(1000);
+  // } while(module.get_mode() != RFM69::OpMode::RECEIVE );
   
 }
 
 void loop() {
 
-  printCurrMode();
+  //printCurrMode();
+
+  Serial.printf("Current Temperature is: %i\r\n", module.read_temp());
 
   delay(1000);
 }

@@ -19,7 +19,7 @@ uint8_t spiInit(void) {
   digitalWrite(CHIP_SELECT_PIN, HIGH);
 
   // Initialize SPI. Using SPI 3 as default.
-  SPI.begin(18,19,23,CHIP_SELECT_PIN);
+  SPI.begin();
 
   // Return the current ID.
   return curr_ID++;
@@ -32,8 +32,6 @@ bool spiBegin(uint8_t id) {
   SPI.beginTransaction(spiSettings);
   //Select the Chip select line.
   digitalWrite(CHIP_SELECT_PIN, LOW);
-  Serial.print(" ");
-  delayMicroseconds(100);
   return true;
 }
 
@@ -42,7 +40,6 @@ bool spiEnd(uint8_t id) {
   //Select the Chip select line.
   digitalWrite(CHIP_SELECT_PIN, HIGH);
   SPI.endTransaction();
-  Serial.print(" ");
   return true;
 }
 

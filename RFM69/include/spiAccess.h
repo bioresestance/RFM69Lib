@@ -1,7 +1,8 @@
 #pragma once
-#include <SPI.h>
+#include "Arduino.h"
+#include "SPI.h"
 
-#define CHIP_SELECT_PIN   (1)
+#define CHIP_SELECT_PIN   (5)
 
 uint8_t spiInit(void);
 bool spiBegin(uint8_t id);
