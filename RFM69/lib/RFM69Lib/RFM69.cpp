@@ -171,7 +171,7 @@ int8_t RFM69::read_temp(void) {
     
     // Finnally, read the result and return it.
     read_reg(tempResult);
-    return tempResult;
+    return (tempResult * -1);
 }
 
 void RFM69::set_bitrate(uint32_t new_bitrate) {

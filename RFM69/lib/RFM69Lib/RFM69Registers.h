@@ -208,7 +208,7 @@ struct RegOpMode : public RFM69Register
         BIT_SET_FROM(byte, 6, _listenOn);
         BIT_SET_FROM(byte, 5, _listenAbort);
         // bits 2 - 4 are mode.
-        byte |= (_mode & 0b00000111) << 2;
+        WIDEBITFIELD_SET_FROM(byte, _mode, 3, 2);
         return byte;
     }
 
@@ -216,7 +216,7 @@ struct RegOpMode : public RFM69Register
         _sequencerOff = BIT_CHECK(byte, 7);
         _listenOn = BIT_CHECK(byte, 6);
         _listenAbort = BIT_CHECK(byte, 5);
-        _mode = (byte & 0b00011100) >> 2;
+        _mode = WIDEBITFIELD_GET_FROM( byte, 3, 2);
     }
 };
 
@@ -473,24 +473,132 @@ struct RegAfcCtrl : public RFM69Register
 /// \todo Adde the listen registers here.
 
 /**
- * @brief AFC control register.
+ * @brief PA Level register.
  */
-// struct RegAfcCtrl : public RFM69Register 
-// {
-//     bool _afcLowBetaOn;
+struct RegPaLevel : public RFM69Register 
+{
+    bool Pa0On;
+    bool Pa1On;
+    bool Pa2On;
+    uint8_t outputPower;
 
-//     RegAfcCtrl(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegAfcCtrl) {}
+    RegPaLevel(): RFM69Register(0x8F, 0x8F, RFM69RegisterAddresses::RegPaLevel) {}
 
-//     uint8_t get_byte() { 
-//         uint8_t byte = 0;
-//         BIT_SET_FROM(byte, 5, _afcLowBetaOn);
-//         return byte;
-//     }
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 7, Pa0On);
+        BIT_SET_FROM(byte, 6, Pa1On);
+        BIT_SET_FROM(byte, 5, Pa2On);
+        byte |= (outputPower & 0x1F);
+        return byte;
+    }
 
-//     void set_byte(uint8_t byte) {
-//         _afcLowBetaOn = BIT_CHECK(byte, 5);
-//     }
-// };
+    void set_byte(uint8_t byte) {
+        Pa0On = BIT_CHECK(byte, 7);
+        Pa1On = BIT_CHECK(byte, 6);
+        Pa2On = BIT_CHECK(byte, 5);
+        outputPower = (byte & 0x1F);
+    }
+};
+
+/**
+ * @brief PA Ramp register.
+ */
+struct RegPaRamp : public RFM69Register 
+{
+    uint8_t PaRmap;
+
+    RegPaRamp(): RFM69Register(0x09, 0x09, RFM69RegisterAddresses::RegPaRamp) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        byte |= (PaRmap & 0x0F);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        PaRmap = (byte & 0x0F);
+    }
+};
+
+/**
+ * @brief Overload current protection register.
+ */
+struct RegOcp : public RFM69Register 
+{
+    bool OcpOn;
+    uint8_t OcpTrim;
+
+    RegOcp(): RFM69Register(0x1A, 0x1A, RFM69RegisterAddresses::RegOcp) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 4, OcpOn);
+        byte |= (OcpTrim & 0x0F);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        OcpOn = BIT_CHECK(byte, 4);
+        OcpTrim = (byte & 0x0F);
+    }
+
+    void set_current_Trim( uint8_t current_ma) {
+        OcpTrim = (current_ma - 45 ) / 5; // Formula from datasheet.
+    }
+};
+
+/**
+ * @brief Low Noise Amplifier register.
+ */
+struct RegLna : public RFM69Register 
+{
+    bool LnaZin;
+    uint8_t LnaCurrentGain;
+    uint8_t LnaGainSelect; 
+
+    RegLna(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegLna) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 7, LnaZin);
+        byte |= (LnaCurrentGain & 0x07) << 3;
+        byte |= (LnaGainSelect & 0x07);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        LnaZin = BIT_CHECK(byte, 7);
+        LnaCurrentGain = (byte & 0b00111000) >> 3;
+        LnaGainSelect = (byte & 0x07);
+    }
+};
+
+/**
+ * @brief RX Bandwidth register.
+ */
+struct RegRxBw : public RFM69Register 
+{
+    bool LnaZin;
+    uint8_t LnaCurrentGain;
+    uint8_t LnaGainSelect; 
+
+    RegRxBw(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegRxBw) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 7, LnaZin);
+        byte |= (LnaCurrentGain & 0x07) << 3;
+        byte |= (LnaGainSelect & 0x07);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        LnaZin = BIT_CHECK(byte, 7);
+        LnaCurrentGain = (byte & 0b00111000) >> 3;
+        LnaGainSelect = (byte & 0x07);
+    }
+};
 
 
 }

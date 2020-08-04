@@ -28,3 +28,35 @@
  * 
  */
 #define BIT_SET_FROM(a, b, c) ((c) ? BIT_SET(a, b) : BIT_CLEAR (a, b))
+
+// Defines bitfields of various widths.
+#define BITMASK_BITS(numBits)   BITMASK_ ## numBits ## BITS
+#define BITMASK_1BITS   (0b00000001)
+#define BITMASK_2BITS   (0b00000011)
+#define BITMASK_3BITS   (0b00000111)
+#define BITMASK_4BITS   (0b00001111)
+#define BITMASK_5BITS   (0b00011111)
+#define BITMASK_6BITS   (0b00111111)
+#define BITMASK_7BITS   (0b01111111)
+#define BITMASK_8BITS   (0b11111111)
+
+/**
+ * @brief Gets a wide bitfield based on a value passed in and the desired location.
+ * 
+ *  @param w Value to modify.
+ *  @param x Value to build the bitfield from.
+ *  @param y Width of bitfield
+ *  @param z Starting location, in bit index.
+ * 
+ */
+#define WIDEBITFIELD_SET_FROM(w, x, y, z)   ( (w) |= ((x) & BITMASK_BITS(y)) << (z)) 
+
+/**
+ * @brief Gets a wide bitfield based on a value passed in and the desired location.
+ * 
+ *  @param x Value to build the bitfield from.
+ *  @param y Width of bitfield
+ *  @param z Starting location, in bit index.
+ * 
+ */
+#define WIDEBITFIELD_GET_FROM(x, y, z)   (((x) & (BITMASK_BITS(y) << (z))) >> (z)) 
