@@ -848,4 +848,138 @@ struct RegRssiValue : public RFM69Register
     }
 };
 
+/**
+ * @brief Digital IO Mapping Register 1.
+ */
+struct RegDioMapping1 : public RFM69Register 
+{
+    uint8_t Dio0Mapping;
+    uint8_t Dio1Mapping;
+    uint8_t Dio2Mapping;
+    uint8_t Dio3Mapping;
+
+    RegDioMapping1(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegDioMapping1) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, Dio0Mapping, 2, 6);
+        WIDEBITFIELD_SET_FROM(byte, Dio1Mapping, 2, 4);
+        WIDEBITFIELD_SET_FROM(byte, Dio2Mapping, 2, 2);
+        WIDEBITFIELD_SET_FROM(byte, Dio3Mapping, 2, 0);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+       Dio0Mapping = WIDEBITFIELD_GET_FROM( byte, 2, 6);
+       Dio1Mapping = WIDEBITFIELD_GET_FROM( byte, 2, 4);
+       Dio2Mapping = WIDEBITFIELD_GET_FROM( byte, 2, 2);
+       Dio3Mapping = WIDEBITFIELD_GET_FROM( byte, 2, 0);
+    }
+};
+
+/**
+* @brief Digital IO Mapping Register 2.
+ */
+struct RegDioMapping2 : public RFM69Register 
+{
+    uint8_t Dio4Mapping;
+    uint8_t Dio5Mapping;
+    uint8_t ClkOut;
+
+    RegDioMapping2(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegDioMapping2) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, Dio4Mapping, 2, 6);
+        WIDEBITFIELD_SET_FROM(byte, Dio5Mapping, 2, 4);
+        WIDEBITFIELD_SET_FROM(byte, ClkOut, 3, 0);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+       Dio4Mapping = WIDEBITFIELD_GET_FROM( byte, 2, 6);
+       Dio5Mapping = WIDEBITFIELD_GET_FROM( byte, 2, 4);
+       ClkOut = WIDEBITFIELD_GET_FROM( byte, 3, 0);
+    }
+};
+
+/**
+ * @brief IRQ flag register 1.
+ */
+struct RegIrqFlags1 : public RFM69Register 
+{
+    bool ModeReady;
+    bool RxReady;
+    bool TxReady;
+    bool PllLock;
+    bool Rssi;
+    bool Timeout;
+    bool AutoMode;
+    bool SyncAddressMatch;
+
+    RegIrqFlags1(): RFM69Register(0x80, 0x80, RFM69RegisterAddresses::RegIrqFlags1) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 7, ModeReady);
+        BIT_SET_FROM(byte, 6, RxReady);
+        BIT_SET_FROM(byte, 5, TxReady);
+        BIT_SET_FROM(byte, 4, PllLock);
+        BIT_SET_FROM(byte, 3, Rssi);
+        BIT_SET_FROM(byte, 2, Timeout);
+        BIT_SET_FROM(byte, 1, AutoMode);
+        BIT_SET_FROM(byte, 0, SyncAddressMatch);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        ModeReady = BIT_CHECK(byte, 7);
+        RxReady = BIT_CHECK(byte, 6);
+        TxReady = BIT_CHECK(byte, 5);
+        PllLock = BIT_CHECK(byte, 4);
+        Rssi = BIT_CHECK(byte, 3);
+        Timeout = BIT_CHECK(byte, 2);
+        AutoMode = BIT_CHECK(byte, 1);
+        SyncAddressMatch = BIT_CHECK(byte, 0);
+    }
+};
+
+/**
+ * @brief IRQ flag register 2.
+ */
+struct RegIrqFlags2 : public RFM69Register 
+{
+    bool FifoFull;
+    bool FifoNotEmpty;
+    bool FifoLevel;
+    bool FifoOverrun;
+    bool PacketSent;
+    bool PayloadReady;
+    bool CrcOk;
+
+    RegIrqFlags2(): RFM69Register(0x80, 0x80, RFM69RegisterAddresses::RegIrqFlags2) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 7, FifoFull);
+        BIT_SET_FROM(byte, 6, FifoNotEmpty);
+        BIT_SET_FROM(byte, 5, FifoLevel);
+        BIT_SET_FROM(byte, 4, FifoOverrun);
+        BIT_SET_FROM(byte, 3, PacketSent);
+        BIT_SET_FROM(byte, 2, PayloadReady);
+        BIT_SET_FROM(byte, 1, CrcOk);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        FifoFull = BIT_CHECK(byte, 7);
+        FifoNotEmpty = BIT_CHECK(byte, 6);
+        FifoLevel = BIT_CHECK(byte, 5);
+        FifoOverrun = BIT_CHECK(byte, 4);
+        PacketSent = BIT_CHECK(byte, 3);
+        PayloadReady = BIT_CHECK(byte, 2);
+        CrcOk = BIT_CHECK(byte, 1);
+    }
+};
+
 }
