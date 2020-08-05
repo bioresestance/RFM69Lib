@@ -602,5 +602,250 @@ struct RegRxBw : public RFM69Register
     }
 };
 
+/**
+ * @brief AFC Bandwidth register.
+ */
+struct RegAfcBw : public RFM69Register 
+{
+    uint8_t DccFreqAfc;
+    uint8_t RxBwMantAfc;
+    uint8_t RxBwExpAfc; 
+
+    RegAfcBw(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegAfcBw) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, DccFreqAfc, 3, 5);
+        WIDEBITFIELD_SET_FROM(byte, RxBwMantAfc, 2, 3);
+        WIDEBITFIELD_SET_FROM(byte, RxBwExpAfc, 3, 0);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        DccFreqAfc = WIDEBITFIELD_GET_FROM( byte, 3, 5);
+        RxBwMantAfc = WIDEBITFIELD_GET_FROM( byte, 2, 3);
+        RxBwExpAfc = WIDEBITFIELD_GET_FROM( byte, 3, 0);
+    }
+};
+
+/**
+ * @brief OOK Peak register.
+ */
+struct RegOokPeak : public RFM69Register 
+{
+    uint8_t OokThreshType;
+    uint8_t OokPeakTheshStep;
+    uint8_t OokPeakThreshDec; 
+
+    RegOokPeak(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegOokPeak) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, OokThreshType, 2, 6);
+        WIDEBITFIELD_SET_FROM(byte, OokPeakTheshStep, 3, 3);
+        WIDEBITFIELD_SET_FROM(byte, OokPeakThreshDec, 3, 0);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        OokThreshType = WIDEBITFIELD_GET_FROM( byte, 2, 6);
+        OokPeakTheshStep = WIDEBITFIELD_GET_FROM( byte, 3, 3);
+        OokPeakThreshDec = WIDEBITFIELD_GET_FROM( byte, 3, 0);
+    }
+};
+
+/**
+ * @brief OOK Average register.
+ */
+struct RegOokAvg : public RFM69Register 
+{
+    uint8_t OokAverageThreshFilt;
+
+    RegOokAvg(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegOokAvg) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, OokAverageThreshFilt, 2, 6);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        OokAverageThreshFilt = WIDEBITFIELD_GET_FROM( byte, 2, 6);
+    }
+};
+
+
+/**
+ * @brief OOK Fixed Threshold register.
+ */
+struct RegOokFix : public RFM69Register 
+{
+    uint8_t OokFixedThresh;
+
+    RegOokFix(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegOokFix) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, OokFixedThresh, 8, 0);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        OokFixedThresh = WIDEBITFIELD_GET_FROM( byte, 8, 0);
+    }
+};
+
+/**
+ * @brief AFC FEI register.
+ */
+struct RegAfcFei : public RFM69Register 
+{
+    bool FeiDone;
+    bool FeiStart;
+    bool AfcDone;
+    bool AfcAutoclearOn;
+    bool AfcAutoOn;
+    bool AfcClear;
+    bool AfcStart;
+
+    RegAfcFei(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegAfcFei) {}
+
+    uint8_t get_byte() { 
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 6, FeiDone);
+        BIT_SET_FROM(byte, 5, FeiStart);
+        BIT_SET_FROM(byte, 4, AfcDone);
+        BIT_SET_FROM(byte, 3, AfcAutoclearOn);
+        BIT_SET_FROM(byte, 2, AfcAutoOn);
+        BIT_SET_FROM(byte, 1, AfcClear);
+        BIT_SET_FROM(byte, 0, AfcStart);
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        FeiDone = BIT_CHECK(byte, 6);
+        FeiStart = BIT_CHECK(byte, 5);
+        AfcDone = BIT_CHECK(byte, 4);
+        AfcAutoclearOn = BIT_CHECK(byte, 3);
+        AfcAutoOn = BIT_CHECK(byte, 2);
+        AfcClear = BIT_CHECK(byte, 1);
+        AfcStart = BIT_CHECK(byte, 0);
+    }
+};
+
+/**
+ * @brief AFC value MSB register.
+ */
+struct RegAfcMsb : public RFM69Register 
+{
+    uint8_t AfcValueMsb;
+
+    RegAfcMsb(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegAfcMsb) {}
+
+    uint8_t get_byte() { 
+        return AfcValueMsb;
+    }
+
+    void set_byte(uint8_t byte) {
+       AfcValueMsb = byte;
+    }
+};
+
+/**
+ * @brief AFC value LSB register.
+ */
+struct RegAfcLsb : public RFM69Register 
+{
+    uint8_t AfcValueLsb;
+
+    RegAfcLsb(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegAfcLsb) {}
+
+    uint8_t get_byte() { 
+        return AfcValueLsb;
+    }
+
+    void set_byte(uint8_t byte) {
+       AfcValueLsb = byte;
+    }
+};
+
+
+/**
+ * @brief Fei value MSB register.
+ */
+struct RegFeiMsb : public RFM69Register 
+{
+    uint8_t FeiValueMsb;
+
+    RegFeiMsb(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegFeiMsb) {}
+
+    uint8_t get_byte() { 
+        return FeiValueMsb;
+    }
+
+    void set_byte(uint8_t byte) {
+       FeiValueMsb = byte;
+    }
+};
+
+
+/**
+ * @brief Fei value LSB register.
+ */
+struct RegFeiLsb : public RFM69Register 
+{
+    uint8_t FeiValueMsb;
+
+    RegFeiLsb(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegFeiLsb) {}
+
+    uint8_t get_byte() { 
+        return FeiValueMsb;
+    }
+
+    void set_byte(uint8_t byte) {
+       FeiValueMsb = byte;
+    }
+};
+
+/**
+ * @brief RSSI Config register.
+ */
+struct RegRssiConfig : public RFM69Register 
+{
+    bool RssiDone;
+    bool RssiStart;
+
+    RegRssiConfig(): RFM69Register(0x02, 0x02, RFM69RegisterAddresses::RegRssiConfig) {}
+
+    uint8_t get_byte() {
+        uint8_t byte = 0;
+        BIT_SET_FROM(byte, 1, RssiDone);
+        BIT_SET_FROM(byte, 0, RssiStart); 
+        return byte;
+    }
+
+    void set_byte(uint8_t byte) {
+        RssiDone = BIT_CHECK(byte, 1);
+        RssiStart = BIT_CHECK(byte, 0);
+    }
+};
+
+/**
+ * @brief RSSI Value Register.
+ */
+struct RegRssiValue : public RFM69Register 
+{
+    uint8_t rssiValue;
+
+    RegRssiValue(): RFM69Register(0x0, 0x00, RFM69RegisterAddresses::RegRssiValue) {}
+
+    uint8_t get_byte() { 
+        return rssiValue;
+    }
+
+    void set_byte(uint8_t byte) {
+       rssiValue = byte;
+    }
+};
 
 }
