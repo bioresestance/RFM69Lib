@@ -283,16 +283,16 @@ struct RegDataModul : public RFM69Register
 
     uint8_t get_byte() { 
         uint8_t byte = 0;
-        byte |= (_dataMode & 0b00000011) << 5;  //Bit 5-6
-        byte |= (_modulationType & 0b00000011) << 3; //Bit 4-3
-        byte |= (_modulationShaping & 0b00000011); //Bit 0-1
+        WIDEBITFIELD_SET_FROM(byte, _dataMode, 2, 5);
+        WIDEBITFIELD_SET_FROM(byte, _modulationType, 2, 3);
+        WIDEBITFIELD_SET_FROM(byte, _modulationShaping, 2, 0);
         return byte;
     }
 
     void set_byte(uint8_t byte) {
-        _dataMode = (byte & 0b01100000) >> 5;
-        _modulationType = (byte & 0b00011000) >> 3;
-        _modulationShaping = (byte & 0b00000011);
+        _dataMode = WIDEBITFIELD_GET_FROM( byte, 2, 5);
+        _modulationType = WIDEBITFIELD_GET_FROM( byte, 2, 3);
+        _modulationShaping = WIDEBITFIELD_GET_FROM( byte, 2, 0);
     }
 };
 
@@ -345,11 +345,13 @@ struct RegFdevMsb : public RFM69Register
     RegFdevMsb(): RFM69Register(0x00, 0x00, RFM69RegisterAddresses::RegFdevMsb) {}
 
     uint8_t get_byte() { 
-        return (_fDevMsb & 0b00011111);
+        uint8_t byte = 0;
+        WIDEBITFIELD_SET_FROM(byte, _fDevMsb, 5, 0);
+        return byte;
     }
 
     void set_byte(uint8_t byte) {
-        _fDevMsb = (byte & 0b00011111);
+        _fDevMsb = WIDEBITFIELD_GET_FROM( byte, 5, 0);
     }
 };
 
@@ -489,7 +491,7 @@ struct RegPaLevel : public RFM69Register
         BIT_SET_FROM(byte, 7, Pa0On);
         BIT_SET_FROM(byte, 6, Pa1On);
         BIT_SET_FROM(byte, 5, Pa2On);
-        byte |= (outputPower & 0x1F);
+        WIDEBITFIELD_SET_FROM(byte, outputPower, 5, 0);
         return byte;
     }
 
@@ -497,7 +499,7 @@ struct RegPaLevel : public RFM69Register
         Pa0On = BIT_CHECK(byte, 7);
         Pa1On = BIT_CHECK(byte, 6);
         Pa2On = BIT_CHECK(byte, 5);
-        outputPower = (byte & 0x1F);
+        outputPower = WIDEBITFIELD_GET_FROM( byte, 5, 0);
     }
 };
 
@@ -512,12 +514,12 @@ struct RegPaRamp : public RFM69Register
 
     uint8_t get_byte() { 
         uint8_t byte = 0;
-        byte |= (PaRmap & 0x0F);
+        WIDEBITFIELD_SET_FROM(byte, PaRmap, 4, 0);
         return byte;
     }
 
     void set_byte(uint8_t byte) {
-        PaRmap = (byte & 0x0F);
+        PaRmap = WIDEBITFIELD_GET_FROM( byte, 4, 0);
     }
 };
 
@@ -534,13 +536,13 @@ struct RegOcp : public RFM69Register
     uint8_t get_byte() { 
         uint8_t byte = 0;
         BIT_SET_FROM(byte, 4, OcpOn);
-        byte |= (OcpTrim & 0x0F);
+        WIDEBITFIELD_SET_FROM(byte, OcpTrim, 4, 0);
         return byte;
     }
 
     void set_byte(uint8_t byte) {
         OcpOn = BIT_CHECK(byte, 4);
-        OcpTrim = (byte & 0x0F);
+        OcpTrim = WIDEBITFIELD_GET_FROM( byte, 4, 0);
     }
 
     void set_current_Trim( uint8_t current_ma) {
@@ -562,15 +564,15 @@ struct RegLna : public RFM69Register
     uint8_t get_byte() { 
         uint8_t byte = 0;
         BIT_SET_FROM(byte, 7, LnaZin);
-        byte |= (LnaCurrentGain & 0x07) << 3;
-        byte |= (LnaGainSelect & 0x07);
+        WIDEBITFIELD_SET_FROM(byte, LnaCurrentGain, 3, 3);
+        WIDEBITFIELD_SET_FROM(byte, LnaGainSelect, 3, 0);
         return byte;
     }
 
     void set_byte(uint8_t byte) {
         LnaZin = BIT_CHECK(byte, 7);
-        LnaCurrentGain = (byte & 0b00111000) >> 3;
-        LnaGainSelect = (byte & 0x07);
+        LnaCurrentGain = WIDEBITFIELD_GET_FROM( byte, 3, 3);
+        LnaGainSelect = WIDEBITFIELD_GET_FROM( byte, 3, 0);
     }
 };
 
@@ -579,24 +581,24 @@ struct RegLna : public RFM69Register
  */
 struct RegRxBw : public RFM69Register 
 {
-    bool LnaZin;
-    uint8_t LnaCurrentGain;
-    uint8_t LnaGainSelect; 
+    uint8_t DccFreq;
+    uint8_t RxBwMant;
+    uint8_t RxBwExp; 
 
     RegRxBw(): RFM69Register(0x88, 0x88, RFM69RegisterAddresses::RegRxBw) {}
 
     uint8_t get_byte() { 
         uint8_t byte = 0;
-        BIT_SET_FROM(byte, 7, LnaZin);
-        byte |= (LnaCurrentGain & 0x07) << 3;
-        byte |= (LnaGainSelect & 0x07);
+        WIDEBITFIELD_SET_FROM(byte, DccFreq, 3, 5);
+        WIDEBITFIELD_SET_FROM(byte, RxBwMant, 2, 3);
+        WIDEBITFIELD_SET_FROM(byte, RxBwExp, 3, 0);
         return byte;
     }
 
     void set_byte(uint8_t byte) {
-        LnaZin = BIT_CHECK(byte, 7);
-        LnaCurrentGain = (byte & 0b00111000) >> 3;
-        LnaGainSelect = (byte & 0x07);
+        DccFreq = WIDEBITFIELD_GET_FROM( byte, 3, 5);
+        RxBwMant = WIDEBITFIELD_GET_FROM( byte, 2, 3);
+        RxBwExp = WIDEBITFIELD_GET_FROM( byte, 3, 0);
     }
 };
 
