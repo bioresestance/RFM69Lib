@@ -148,14 +148,14 @@ public:
     RFM69RegisterAddresses get_reg_address() {return _address;}
  
     /**
-     * @brief Returns the stored value as a single raw byte.
+     * @brief Returns the serialized value of the register.
      * 
      * @return uint8_t Raw byte as defined in register.
      */
     virtual uint8_t get_byte() = 0;
 
     /**
-     * @brief Allows the register to be set as a byte.
+     * @brief Allows deserialize a byte into the register components.
      * 
      * @param byte The byte to set the register to.
      */
